@@ -28,9 +28,18 @@ while getopts "a:l:g:s:f:e:uvd" opt; do
         d)
             devMode='true'
         ;;
+        n)
+            build_number=$OPTARG
+        ;;
     esac
 done
-    
+
+if [[ "$build_number" != "" ]];then
+    depl="${build_number}-KernelBuild"
+else
+    depl="default-KernelBuild"
+fi
+
 [[ $# -eq 0 || -z $artifactsStagingDirectory || -z $location ]] && { echo "Usage: $0 <-a foldername> <-l location> [-e parameters-file] [-g resource-group-name] [-u] [-s storageAccountName] [-v]"; exit 1; }
 
 if [[ -z $templateFile ]]
@@ -128,8 +137,8 @@ then
 else
     if [[ $uploadArtifacts ]]
     then
-        az group deployment create -g "$resourceGroupName" -n AzureRMSamples --template-uri $templateUri --parameters "$parameterJson" --verbose
+        az group deployment create -g "$resourceGroupName" -n "$depl" --template-uri $templateUri --parameters "$parameterJson" --verbose
     else
-        az group deployment create -g "$resourceGroupName" -n AzureRMSamples --template-file $templateFile --parameters "$parameterJson" --verbose
+        az group deployment create -g "$resourceGroupName" -n "$depl" --template-file $templateFile --parameters "$parameterJson" --verbose
     fi
 fi
