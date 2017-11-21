@@ -14,8 +14,9 @@
     "dnsNameForPublicIP": {
       "value": "hello-cloud"
     },
-    "userdataParameters": {
+    "customData": {
       "value": "%params%"
     }
+    
   }
 }
